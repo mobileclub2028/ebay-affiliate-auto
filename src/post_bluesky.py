@@ -24,7 +24,11 @@ def main():
     s = requests.post(f"{ATP}/com.atproto.server.createSession",
                       json={"identifier": handle, "password": app_pw}, timeout=20)
     s.raise_for_status()
-    tok, did = s.json()["accessToken"], s.json()["did"]
+    sess = s.json()
+    tok = sess.get("accessJwt") or sess.get("accessToken")
+    did = sess["did"]
+    if not tok:
+        raise RuntimeError(f"no access token in session: {str(sess)[:200]}")
 
     data = json.loads(DATA.read_text(encoding="utf-8"))
     picks = []
