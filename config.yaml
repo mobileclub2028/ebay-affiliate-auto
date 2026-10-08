@@ -3,7 +3,7 @@
 
 market: "EBAY_US"
 site_name: "RefurbPrice US"
-site_url: "https://YOUR-GITHUB-USERNAME.github.io/ebay-affiliate-auto/"
+site_url: "https://mobileclub2028.github.io/ebay-affiliate-auto/"
 language: "en"
 
 # EPN — 니가 메일로 받은 값으로 교체 (필수)
@@ -23,18 +23,21 @@ ebay:
 
 niches:
   - slug: "thinkpad-x1-carbon-used"
-    query: "thinkpad x1 carbon used"
+    query: "thinkpad x1 carbon gen 8 i7 16gb"
     title: "Used ThinkPad X1 Carbon Price Tracker (eBay Live)"
+    min_price: 250
     max_price: 900
     min_feedback: 95
   - slug: "iphone-13-refurbished"
-    query: "iphone 13 refurbished unlocked"
+    query: "iphone 13 128gb unlocked"
     title: "Refurbished iPhone 13 Price Tracker (eBay Live)"
+    min_price: 220
     max_price: 650
     min_feedback: 95
   - slug: "dell-xps-13-used"
-    query: "dell xps 13 used 16gb"
+    query: "dell xps 13 9310 i7 16gb"
     title: "Used Dell XPS 13 Price Tracker (eBay Live)"
+    min_price: 250
     max_price: 800
     min_feedback: 95
 

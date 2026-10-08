@@ -36,11 +36,11 @@ def get_oauth_token(app_id: str, cert_id: str) -> str | None:
         return None
 
 
-def search_live(token: str, query: str, limit: int, max_price: float) -> list[dict]:
+def search_live(token: str, query: str, limit: int, min_price: float, max_price: float) -> list[dict]:
     url = "https://api.ebay.com/buy/browse/v1/item_summary/search"
     params = {
         "q": query,
-        "filter": f"price:[..{max_price}],priceCurrency:USD",
+        "filter": f"price:[{min_price}..{max_price}],priceCurrency:USD",
         "limit": str(limit),
         "sort": "price",
     }
@@ -52,13 +52,24 @@ def search_live(token: str, query: str, limit: int, max_price: float) -> list[di
     )
     r.raise_for_status()
     items = r.json().get("itemSummaries", [])
+    junk = ("motherboard", "mainboard", "led board", "cable", "parts only", "for parts",
+            "case", "cover", "keyboard", "charger only", "battery only", "screen protector")
     out = []
     for it in items:
         price = (it.get("price") or {})
+        title = it.get("title", "")[:120]
+        try:
+            pval = float(price.get("value", 0) or 0)
+        except (TypeError, ValueError):
+            continue
+        if pval < min_price:
+            continue
+        if any(j in title.lower() for j in junk):
+            continue
         out.append({
             "item_id": it.get("itemId", "").replace("v1|", "").split("|")[0],
-            "title": it.get("title", "")[:120],
-            "price": float(price.get("value", 0) or 0),
+            "title": title,
+            "price": pval,
             "currency": price.get("currency", "USD"),
             "url": it.get("itemWebUrl", ""),
             "image": (it.get("image") or {}).get("imageUrl", ""),
@@ -109,7 +120,7 @@ def main():
         slug, query = n["slug"], n["query"]
         limit = CONFIG["filters"]["limit_per_niche"]
         try:
-            items = search_live(token, query, limit, n["max_price"]) if token else mock_items(query, limit)
+            items = search_live(token, query, limit, n.get("min_price", 0), n["max_price"]) if token else mock_items(query, limit)
         except Exception as e:
             print(f"[warn] {slug} search failed, mock fallback: {e}", file=sys.stderr)
             items = mock_items(query, limit)
