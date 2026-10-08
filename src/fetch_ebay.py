@@ -98,7 +98,15 @@ def mock_items(query: str, limit: int) -> list[dict]:
     return items
 
 
-def epn_link(item_url: str, campid: str, cfg: dict, customid: str) -> str:
+def epn_link(item_url: str, campid: str, cfg: dict, customid: str, item_id: str = "") -> str:
+    # rover 경유는 JS 리다이렉트라 광고차단에서 빈 화면이 됨.
+    # 숫자 item_id가 있으면 ebay.com 직링크 + 추적파라미터로 바로 이동.
+    if item_id and item_id.isdigit():
+        return (
+            f"https://www.ebay.com/itm/{item_id}?mkcid=1&mkrid={cfg['epn']['mkrid']}"
+            f"&siteid={cfg['epn']['siteid']}&campid={campid}&toolid={cfg['epn']['toolid']}"
+            f"&customid={quote_plus(customid)}&mkevt=1"
+        )
     base = "https://rover.ebay.com/rover/1/711-53200-19255-0/1"
     return (
         f"{base}?campid={campid}&toolid={cfg['epn']['toolid']}"
@@ -133,7 +141,7 @@ def main():
             x["median_ref"] = median
             x["discount_pct"] = round((1 - x["price"] / median) * 100, 1) if median else 0
             x["hot"] = x["discount_pct"] >= th
-            x["aff_url"] = epn_link(x["url"], campid, CONFIG, f"{CONFIG['epn']['customid_prefix']}-{slug}")
+            x["aff_url"] = epn_link(x["url"], campid, CONFIG, f"{CONFIG['epn']['customid_prefix']}-{slug}", x.get("item_id", ""))
 
         items.sort(key=lambda x: x["price"])
         result["niches"][slug] = {"meta": n, "median": median, "items": items, "count": len(items)}
