@@ -28,11 +28,23 @@ niches:
     min_price: 150
     max_price: 450
     min_feedback: 95
+  - slug: "iphone-12-mini-unlocked"
+    query: "iphone 12 mini 128gb unlocked"
+    title: "Refurbished iPhone 12 mini Price Tracker (eBay Live)"
+    min_price: 130
+    max_price: 400
+    min_feedback: 95
   - slug: "iphone-13-refurbished"
     query: "iphone 13 128gb unlocked"
     title: "Refurbished iPhone 13 Price Tracker (eBay Live)"
     min_price: 220
     max_price: 650
+    min_feedback: 95
+  - slug: "iphone-13-mini-unlocked"
+    query: "iphone 13 mini 128gb unlocked"
+    title: "Refurbished iPhone 13 mini Price Tracker (eBay Live)"
+    min_price: 180
+    max_price: 500
     min_feedback: 95
   - slug: "iphone-14-unlocked"
     query: "iphone 14 128gb unlocked"
