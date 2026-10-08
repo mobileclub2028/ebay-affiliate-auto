@@ -1,0 +1,50 @@
+# eBay Affiliate Auto — US Refurb Tech Niche
+# Python 3.10+ / Free stack: GitHub Actions + GitHub Pages + Telegram
+
+market: "EBAY_US"
+site_name: "RefurbPrice US"
+site_url: "https://YOUR-GITHUB-USERNAME.github.io/ebay-affiliate-auto/"
+language: "en"
+
+# EPN — 니가 메일로 받은 값으로 교체 (필수)
+epn:
+  campid: "5339212458"   # 예: 5339xxxx
+  toolid: "10001"
+  mkrid: "711-53200-19255-0"
+  siteid: "0"
+  customid_prefix: "refurbprice"
+
+# Browse API — developers.ebay.com 에서 App ID 발급 후 교체
+ebay:
+  app_id_env: "EBAY_APP_ID"
+  cert_id_env: "EBAY_CERT_ID"
+  marketplace: "EBAY_US"
+  # 인증 실패해도 mock 데이터로 사이트 빌드는 되게 설계됨
+
+niches:
+  - slug: "thinkpad-x1-carbon-used"
+    query: "thinkpad x1 carbon used"
+    title: "Used ThinkPad X1 Carbon Price Tracker (eBay Live)"
+    max_price: 900
+    min_feedback: 95
+  - slug: "iphone-13-refurbished"
+    query: "iphone 13 refurbished unlocked"
+    title: "Refurbished iPhone 13 Price Tracker (eBay Live)"
+    max_price: 650
+    min_feedback: 95
+  - slug: "dell-xps-13-used"
+    query: "dell xps 13 used 16gb"
+    title: "Used Dell XPS 13 Price Tracker (eBay Live)"
+    max_price: 800
+    min_feedback: 95
+
+filters:
+  condition: ["USED", "CERTIFIED_REFURBISHED", "SELLER_REFURBISHED"]
+  buying_options: ["FIXED_PRICE", "AUCTION"]
+  limit_per_niche: 20
+  top_picks_telegram: 3
+  discount_threshold_pct: 15  # 대표 시세 대비 이만큼 싸면 HOT DEAL
+
+telegram:
+  bot_token_env: "TELEGRAM_BOT_TOKEN"
+  chat_id_env: "TELEGRAM_CHAT_ID"
