@@ -1,11 +1,16 @@
 """deals.json -> 정적 HTML 사이트 빌드 (SEO + EPN 링크 + 광고표기)."""
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote_plus
+
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "deals.json"
 DIST = ROOT / "docs"  # GitHub Pages용
+CONFIG = yaml.safe_load(open(ROOT / "config.yaml", encoding="utf-8"))
 
 CARD = """
 <article class="card">
@@ -14,6 +19,7 @@ CARD = """
   <p class="price">${price} <span class="off">{off}</span></p>
   <p class="meta">{cond} · Seller {fb}% · Median ${median}</p>
   <a class="btn" href="{aff}" target="_blank" rel="nofollow sponsored noopener">Check Live Price on eBay</a>
+  <p class="alt"><a href="{search_aff}" target="_blank" rel="nofollow sponsored noopener">Or search similar live listings</a> (opens even if this item sold)</p>
 </article>
 """
 
@@ -59,13 +65,20 @@ def main():
     DIST.mkdir(exist_ok=True)
     updated = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     idx_cards = []
+    campid = os.getenv("EPN_CAMPID", CONFIG["epn"]["campid"])
     for slug, n in data["niches"].items():
         meta, items, median = n["meta"], n["items"], n["median"]
+        search_aff = (
+            "https://www.ebay.com/sch/i.html?_nkw=" + quote_plus(meta["query"])
+            + f"&mkcid=1&mkrid={CONFIG['epn']['mkrid']}&siteid={CONFIG['epn']['siteid']}"
+            + f"&campid={campid}&toolid={CONFIG['epn']['toolid']}"
+            + f"&customid={quote_plus(CONFIG['epn']['customid_prefix'] + '-' + slug + '-search')}&mkevt=1"
+        )
         cards = []
         for x in items[:12]:
             badge = "🔥 HOT DEAL" if x["hot"] else ("MOCK" if data["mode"] == "mock" else "LIVE")
             cards.append(CARD.format(
-                badge=badge, title=x["title"], aff=x["aff_url"],
+                badge=badge, title=x["title"], aff=x["aff_url"], search_aff=search_aff,
                 price=x["price"], off=f"-{x['discount_pct']}%" if x["hot"] else "",
                 cond=x["condition"], fb=x["seller_feedback"], median=median,
             ))
