@@ -22,11 +22,11 @@ ebay:
   # 인증 실패해도 mock 데이터로 사이트 빌드는 되게 설계됨
 
 niches:
-  - slug: "thinkpad-x1-carbon-used"
-    query: "thinkpad x1 carbon gen 8 i7 16gb"
-    title: "Used ThinkPad X1 Carbon Price Tracker (eBay Live)"
-    min_price: 250
-    max_price: 900
+  - slug: "iphone-12-unlocked"
+    query: "iphone 12 128gb unlocked"
+    title: "Refurbished iPhone 12 Price Tracker (eBay Live)"
+    min_price: 150
+    max_price: 450
     min_feedback: 95
   - slug: "iphone-13-refurbished"
     query: "iphone 13 128gb unlocked"
@@ -34,11 +34,29 @@ niches:
     min_price: 220
     max_price: 650
     min_feedback: 95
-  - slug: "dell-xps-13-used"
-    query: "dell xps 13 9310 i7 16gb"
-    title: "Used Dell XPS 13 Price Tracker (eBay Live)"
-    min_price: 250
-    max_price: 800
+  - slug: "iphone-14-unlocked"
+    query: "iphone 14 128gb unlocked"
+    title: "Refurbished iPhone 14 Price Tracker (eBay Live)"
+    min_price: 280
+    max_price: 750
+    min_feedback: 95
+  - slug: "iphone-15-unlocked"
+    query: "iphone 15 128gb unlocked"
+    title: "Refurbished iPhone 15 Price Tracker (eBay Live)"
+    min_price: 400
+    max_price: 950
+    min_feedback: 95
+  - slug: "iphone-16-unlocked"
+    query: "iphone 16 128gb unlocked"
+    title: "Refurbished iPhone 16 Price Tracker (eBay Live)"
+    min_price: 500
+    max_price: 1100
+    min_feedback: 95
+  - slug: "iphone-17-unlocked"
+    query: "iphone 17 128gb unlocked"
+    title: "iPhone 17 Price Tracker (eBay Live)"
+    min_price: 600
+    max_price: 1300
     min_feedback: 95
 
 filters:

@@ -40,7 +40,7 @@ def search_live(token: str, query: str, limit: int, min_price: float, max_price:
     url = "https://api.ebay.com/buy/browse/v1/item_summary/search"
     params = {
         "q": query,
-        "filter": f"price:[{min_price}..{max_price}],priceCurrency:USD",
+        "filter": f"price:[{min_price}..{max_price}],priceCurrency:USD,buyingOptions:{{FIXED_PRICE}}",
         "limit": str(limit),
         "sort": "price",
     }
