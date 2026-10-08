@@ -31,20 +31,21 @@ def main():
         raise RuntimeError(f"no access token in session: {str(sess)[:200]}")
 
     data = json.loads(DATA.read_text(encoding="utf-8"))
-    picks = []
+    med = {}
     for slug, n in data["niches"].items():
-        hot = [x for x in n["items"] if x.get("hot")] or n["items"][:1]
-        if hot:
-            x = hot[0]
-            picks.append((slug, x))
-    picks = picks[:4]  # 1 post에 최대 4줄
+        items = n["items"]
+        med[slug] = n["median"]
     base = CONFIG.get("site_url", "").rstrip("/")
-    lines = ["Refurb iPhone live medians (eBay US, affiliate links):"]
-    for slug, x in picks:
-        short = x["title"][:52]
-        lines.append(f"- {short} ${x['price']} {base}/{slug}.html")
-    lines.append("#iphone #refurbished #edeals")
-    text = "\n".join(lines)[:290]  # 300자 제한 여유
+    g = lambda s: med.get(s, "")
+
+    text = (
+        f"Refurb iPhone medians (eBay US, live):\n"
+        f"12 ${g('iphone-12-unlocked')} · mini ${g('iphone-12-mini-unlocked')}\n"
+        f"13 ${g('iphone-13-refurbished')} · mini ${g('iphone-13-mini-unlocked')}\n"
+        f"14 ${g('iphone-14-unlocked')} · 15 ${g('iphone-15-unlocked')}\n"
+        f"16 ${g('iphone-16-unlocked')} · 17 ${g('iphone-17-unlocked')}\n"
+        f"{base}/ #iphone #refurbished"
+    )[:290]
 
     r = requests.post(
         f"{ATP}/com.atproto.repo.createRecord",
