@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mobileclub2028.github.io/ebay-affiliate-auto/sitemap.xml

@@ -94,6 +94,18 @@ def main():
         print(f"[build] {slug}.html")
     (DIST / "index.html").write_text(INDEX_TPL.format(cards="\n".join(idx_cards)), encoding="utf-8")
     print(f"[build] index.html -> {DIST}")
+    base = CONFIG.get("site_url", "").rstrip("/")
+    urls = [f"{base}/"] + [f"{base}/{slug}.html" for slug in data["niches"]]
+    sm = ['<?xml version="1.0" encoding="UTF-8"?>',
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    for u in urls:
+        sm.append(f"<url><loc>{u}</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq></url>")
+    sm.append("</urlset>")
+    (DIST / "sitemap.xml").write_text("\n".join(sm), encoding="utf-8")
+    (DIST / "robots.txt").write_text(
+        f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n", encoding="utf-8")
+    print(f"[build] sitemap.xml ({len(urls)} urls) + robots.txt")
 
 
 if __name__ == "__main__":
