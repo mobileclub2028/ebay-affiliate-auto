@@ -30,6 +30,15 @@ jobs:
         env:
           BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
           BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+      - run: python src/gen_shorts.py
+      - run: python src/send_shorts_tg.py
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shorts-video
+          path: shorts/*.mp4
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "auto: daily deals update"
