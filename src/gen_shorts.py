@@ -23,6 +23,14 @@ WHITE = (255, 255, 255)
 GRAY = (170, 180, 195)
 
 
+def ffmpeg_exe() -> str:
+    try:
+        import imageio_ffmpeg
+        return imageio_ffmpeg.get_ffmpeg_exe()
+    except Exception:
+        return "ffmpeg"
+
+
 def font(size: int):
     for p in ["/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
               "C:/Windows/Fonts/arialbd.ttf"]:
@@ -96,7 +104,7 @@ def main():
     script = " ".join(lines)
     asyncio.run(narrate(script, mp3))
 
-    subprocess.run(["ffmpeg", "-y", "-loop", "1", "-i", str(png), "-i", str(mp3),
+    subprocess.run([ffmpeg_exe(), "-y", "-loop", "1", "-i", str(png), "-i", str(mp3),
                     "-c:v", "libx264", "-tune", "stillimage", "-c:a", "aac",
                     "-b:a", "128k", "-pix_fmt", "yuv420p", "-shortest", str(mp4)],
                    check=True, capture_output=True)
